@@ -1,0 +1,27 @@
+[project]
+name = "doodlebug"
+version = "0.0.0"
+description = "Doodlebug is a lightweight library for mathematical optimization. Inspired by the doodlebug (antlion), it provides simple tools to experiment with optimization problems."
+authors = [
+  {name = "fugashy", email = "fugashy@icloud.com"}]
+dependencies = [
+  "click",
+  "icecream",
+  "matplotlib",
+  "numpy",
+  "pandas",
+  "scikit-learn",
+  "scipy",
+  "tqdm",
+  ]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pdm]
+python-version = 3.13
+
+
+[project.scripts]
+doodlebug = "cli:main"
