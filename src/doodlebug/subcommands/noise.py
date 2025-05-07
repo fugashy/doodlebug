@@ -30,7 +30,7 @@ def norm(ctx, mean, stddev):
     mean = [float(v) for v in mean.split(",")]
     stddev = [float(v) for v in stddev.split(",")]
     ctx.obj["noise"] = {
-            "model": "norm",
+            "type": "norm",
             "params": {
                 "mean": mean,
                 "stddev": stddev,

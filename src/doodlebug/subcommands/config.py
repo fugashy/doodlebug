@@ -1,7 +1,7 @@
 import click
 
 
-from .data import data
+from .model import model
 from .noise import noise
 from .updater import updater
 from .optimizer import optimizer
@@ -14,7 +14,7 @@ def config(ctx):
 
 
 commands = [
-        data,
+        model,
         noise,
         updater,
         optimizer,
