@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from icecream import ic
 import numpy as np
 

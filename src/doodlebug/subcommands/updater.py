@@ -12,12 +12,21 @@ def updater(ctx):
 
 @updater.command()
 @save_as_json
-@click.option("--weight", type=float, default=0.001)
 @click.pass_context
-def gauss_newton(ctx, weight):
+def gauss_newton(ctx):
     ctx.obj["updater"] = {
             "type": "gauss_newton",
-            "weight": weight,
             }
 
 
+@updater.command()
+@save_as_json
+@click.option("--weight", type=float, default=0.001)
+@click.pass_context
+def levenberg_marquardt(ctx, weight):
+    ctx.obj["updater"] = {
+            "type": "levenberg_marquardt",
+            "params": {
+                "weight": weight,
+                }
+            }

@@ -4,7 +4,7 @@ import click
 from .model import model
 from .noise import noise
 from .updater import updater
-from .optimizer import optimizer
+from .optimize import optimize
 
 
 @click.group()
@@ -17,7 +17,7 @@ commands = [
         model,
         noise,
         updater,
-        optimizer,
+        optimize,
         ]
 for c in commands:
     config.add_command(c)
