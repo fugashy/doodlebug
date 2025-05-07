@@ -4,8 +4,7 @@ ic.configureOutput(
         prefix="doodlebug | ",
         includeContext=False)
 
-from .subcommands.data import data
-from .subcommands.noise import noise
+from .subcommands.config import config
 
 
 u"""
@@ -25,8 +24,7 @@ def doodlebug(ctx, config_filepath):
 
 def main():
     commands = [
-            data,
-            noise,
+            config,
             ]
     for c in commands:
         doodlebug.add_command(c)
