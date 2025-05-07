@@ -24,4 +24,4 @@ python-version = 3.13
 
 
 [project.scripts]
-doodlebug = "cli:main"
+doodlebug = "doodlebug.cli:main"
