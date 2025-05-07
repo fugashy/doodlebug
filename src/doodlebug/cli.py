@@ -5,6 +5,7 @@ ic.configureOutput(
         includeContext=False)
 
 from .subcommands.config import config
+from .core.optimize import optimize as opt
 
 
 u"""
@@ -20,6 +21,12 @@ def doodlebug(ctx, config_filepath):
     ic("Wellcome")
     ctx.ensure_object(dict)
     ctx.obj["config_filepath"] = config_filepath
+
+
+@doodlebug.command()
+@click.pass_context
+def optimize(ctx):
+    opt(ctx.obj)
 
 
 def main():
