@@ -5,7 +5,11 @@ ic.configureOutput(
         includeContext=False)
 
 from .subcommands.config import config
-from .core.optimize import optimize as opt
+from .subcommands.show import show
+from .core.optimize import (
+        optimize as opt,
+        optimize_graph as opt_graph,
+        )
 
 
 u"""
@@ -29,9 +33,16 @@ def optimize(ctx):
     opt(ctx.obj)
 
 
+@doodlebug.command()
+@click.argument("graph_filepath", type=str)
+def optimize_graph(graph_filepath):
+    opt_graph(graph_filepath)
+
+
 def main():
     commands = [
             config,
+            show,
             ]
     for c in commands:
         doodlebug.add_command(c)

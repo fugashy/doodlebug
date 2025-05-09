@@ -1,12 +1,19 @@
 import json
 from copy import deepcopy
+import pickle
 
 from icecream import ic
 import numpy as np
 import numpy.linalg as LA
+import networkx as nx
+import g2opy as g2o
 
 from .model import create as create_model
 from .updater import create as create_updater
+from .optimize_utils import (
+        nx2g2o,
+        g2o2nx,
+        )
 
 
 def optimize(config_by):
@@ -71,3 +78,29 @@ class Optimizer():
             print('user interruption has occured')
         finally:
             return self.__num_iteration
+
+
+def optimize_graph(graph_filepath):
+    ic(graph_filepath)
+
+    with open(graph_filepath, "rb") as f:
+        graph_before = pickle.load(f)
+
+    ic(graph_before)
+
+    optimizer, g2o_node_id_by = nx2g2o(graph_before)
+    optimizer.initialize_optimization()
+    optimizer.optimize(10)
+
+    graph_after = g2o2nx(optimizer, g2o_node_id_by, graph_before)
+
+    output_graph_path = f"{graph_filepath}-after.gpickle"
+    with open(output_graph_path, "wb") as f:
+        pickle.dump(graph_after, f)
+
+    ic("done")
+    ic(f"output the graph optimized: {output_graph_path}")
+
+
+
+

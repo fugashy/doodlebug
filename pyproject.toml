@@ -13,6 +13,8 @@ dependencies = [
   "scikit-learn",
   "scipy",
   "tqdm",
+  "networkx",
+  "g2opy",
   ]
 
 [build-system]
