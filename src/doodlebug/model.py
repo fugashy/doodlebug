@@ -6,8 +6,8 @@ import numpy as np
 
 def get_models():
     model_by = {
-            "linear": Linear,
-            "michaelis_menten_equation": MichaelisMentenEquation,
+            "Linear": Linear(),
+            "Curve": Curve(),
             }
 
     return model_by
@@ -16,16 +16,23 @@ def get_models():
 class Linear():
     def __init__(self):
         self.name = "Linear"
-        self.param_by = {
+        self.p = {
                 "a": 1.,
                 "b": 1.,
                 }
 
+    def get_model_func(self):
+        return lambda x: self.p["a"] * x + self.p["b"]
 
-class MichaelisMentenEquation():
+
+class Curve():
     def __init__(self):
-        self.name = "MichaelisMentenEquation"
-        self.param_by = {
-                "b0": 1.,
-                "b1": 1.,
+        self.name = "Curve"
+        self.p = {
+                "a": 0.1,
+                "b": 1.,
+                "c": 1.,
                 }
+
+    def get_model_func(self):
+        return lambda x: self.p["a"] * x**2 + self.p["b"] * x + self.p["c"]

@@ -19,11 +19,11 @@ class GUI(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("doodlebug")
-        self.points = PointManager()
+        self.point_manager = PointManager()
 
         # Example dictionary
         self.option_dict = get_models()
-        self.selected_option = None
+        self.selected_option = list(self.option_dict.keys())[0]
 
         # Matplotlib figure
         self.canvas = FigureCanvas(plt.Figure())
@@ -52,6 +52,8 @@ class GUI(QMainWindow):
         # Connect click event
         self.canvas.mpl_connect("button_press_event", self.on_click)
 
+        self.redraw()
+
     def on_click(self, event):
         if not event.inaxes:
             return
@@ -59,35 +61,43 @@ class GUI(QMainWindow):
         x, y = event.xdata, event.ydata
 
         if event.button == 1:  # Left-click → add point
-            self.points.add(x, y)
+            self.point_manager.add(x, y)
             print(f"Added point: ({x:.2f}, {y:.2f})")
 
         elif event.button == 3:  # Right-click → remove nearest point
-            self.points.remove(x, y)
+            self.point_manager.remove(x, y)
 
-        self.redraw_points()
-
-    def redraw_points(self):
-        self.ax.cla()
-        _init_ax(self.ax)
-
-        if not self.points.get():
-            self.canvas.draw()
-            return
-
-        points_array = np.array(self.points.get())
-        self.ax.plot(points_array[:, 0], points_array[:, 1], 'ro')
-
-        self.canvas.draw()
+        self.redraw()
 
     def reset_points(self):
-        self.points.reset()
-        self.redraw_points()
+        self.point_manager.reset()
+        self.redraw()
         print("All points cleared.")
 
     def option_changed(self, text):
-        self.points.reset()
-        self.redraw_points()
+        self.point_manager.reset()
+        self.redraw()
 
         self.selected_option = text
         print(f"Selected option: {text} → {self.option_dict[text]}")
+
+    def redraw(self):
+        self.ax.cla()
+        _init_ax(self.ax)
+
+        if not self.point_manager.get():
+            self.canvas.draw()
+            return
+
+        points_array = np.array(self.point_manager.get())
+        self.ax.plot(points_array[:, 0], points_array[:, 1], 'ro')
+
+        model = get_models()[self.selected_option]
+        x_range = (
+                min(points_array[:,0]),
+                max(points_array[:,0]))
+        model_func = model.get_model_func()
+        ys = model_func(points_array[:,0])
+        self.ax.plot(points_array[:,0], ys, "g--", label="Model")
+
+        self.canvas.draw()
