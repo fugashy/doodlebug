@@ -22,8 +22,8 @@ class GUI(QMainWindow):
         self.point_manager = PointManager()
 
         # Example dictionary
-        self.option_dict = get_models()
-        self.selected_option = list(self.option_dict.keys())[0]
+        self.model_by = get_models()
+        self.selected_option = list(self.model_by.keys())[0]
 
         # Matplotlib figure
         self.canvas = FigureCanvas(plt.Figure())
@@ -36,7 +36,7 @@ class GUI(QMainWindow):
 
         # Dropdown (ComboBox) for selecting option
         self.dropdown = QComboBox()
-        self.dropdown.addItems(self.option_dict.keys())
+        self.dropdown.addItems(self.model_by.keys())
         self.dropdown.currentTextChanged.connect(self.option_changed)
 
         # Layout setup
@@ -79,7 +79,7 @@ class GUI(QMainWindow):
         self.redraw()
 
         self.selected_option = text
-        print(f"Selected option: {text} → {self.option_dict[text]}")
+        print(f"→ {self.selected_option}")
 
     def redraw(self):
         self.ax.cla()
