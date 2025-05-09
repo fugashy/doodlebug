@@ -5,14 +5,9 @@ description = "Doodlebug is a lightweight library for mathematical optimization.
 authors = [
   {name = "fugashy", email = "fugashy@icloud.com"}]
 dependencies = [
-  "click",
-  "icecream",
   "matplotlib",
   "numpy",
-  "pandas",
-  "scikit-learn",
-  "scipy",
-  "tqdm",
+  "pyqt5",
   ]
 
 [build-system]
