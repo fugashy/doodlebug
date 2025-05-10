@@ -1,3 +1,4 @@
+from icecream import ic
 import numpy as np
 from PyQt5.QtWidgets import (
     QMainWindow, QVBoxLayout, QWidget, QPushButton, QComboBox
@@ -64,7 +65,7 @@ class GUI(QMainWindow):
 
         if event.button == 1:  # Left-click → add point
             self.point_manager.add(x, y)
-            print(f"Added point: ({x:.2f}, {y:.2f})")
+            ic(f"Added point: ({x:.2f}, {y:.2f})")
 
         elif event.button == 3:  # Right-click → remove nearest point
             self.point_manager.remove(x, y)
@@ -74,14 +75,14 @@ class GUI(QMainWindow):
     def reset_points(self):
         self.point_manager.reset()
         self.redraw()
-        print("All points cleared.")
+        ic("All points cleared.")
 
     def option_changed(self, text):
         self.redraw()
 
         self.selected_option = text
         self.model = get_models()[self.selected_option]
-        print(f"→ {self.selected_option}")
+        ic(f"→ {self.selected_option}")
 
     def redraw(self):
         self.ax.cla()

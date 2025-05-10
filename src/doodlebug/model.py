@@ -109,4 +109,4 @@ class Ellipse(DrawableModelInterface):
         points = np.array([
             self.predict(x, y)
             for x, y in zip(xs, ys)]).T
-        ax.plot(points[0], points[1], "g--")
+        ax.scatter(points[0], points[1], marker=".", color="green")
