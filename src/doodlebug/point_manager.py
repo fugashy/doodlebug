@@ -22,7 +22,6 @@ class PointManager:
 
     def add(self, x, y):
         self.points.append((x, y))
-        self.points = sorted(self.points)
 
     def remove(self, x, y, threshold=0.5):
         _remove_nearest_point(self.points, x, y, threshold)

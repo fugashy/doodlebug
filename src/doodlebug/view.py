@@ -22,10 +22,6 @@ class GUI(QMainWindow):
         self.setWindowTitle("doodlebug")
         self.point_manager = PointManager()
 
-        # Example dictionary
-        self.model_by = get_models()
-        self.selected_option = list(self.model_by.keys())[0]
-        self.model_params = self.model_by[self.selected_option].get_params()
 
         # Matplotlib figure
         self.canvas = FigureCanvas(plt.Figure())
@@ -38,8 +34,12 @@ class GUI(QMainWindow):
 
         # Dropdown (ComboBox) for selecting option
         self.dropdown = QComboBox()
-        self.dropdown.addItems(self.model_by.keys())
+        self.dropdown.addItems(get_models().keys())
         self.dropdown.currentTextChanged.connect(self.option_changed)
+
+        # Model
+        self.selected_option = list(get_models().keys())[0]
+        self.model = get_models()[self.selected_option]
 
         # Layout setup
         layout = QVBoxLayout()
@@ -80,7 +80,7 @@ class GUI(QMainWindow):
         self.redraw()
 
         self.selected_option = text
-        self.model_params = self.model_by[self.selected_option].get_params()
+        self.model = get_models()[self.selected_option]
         print(f"→ {self.selected_option}")
 
     def redraw(self):
@@ -96,10 +96,7 @@ class GUI(QMainWindow):
         self.ax.plot(points_array[:,0], points_array[:,1], 'ro')
 
         # Plot a optimized line
-        model = self.model_by[self.selected_option]
-        new_model_params = optimize(points_array, model, self.model_params)
-        optimized_line = [model.predict(new_model_params, x, y) for x, y in self.point_manager.get()]
-
-        self.ax.plot(points_array[:,0], optimized_line, "g--", label="Model")
+        optimize(points_array, self.model)
+        self.model.plot(self.ax, points_array[:,0], points_array[:,1])
 
         self.canvas.draw()

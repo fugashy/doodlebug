@@ -3,7 +3,10 @@ import numpy as np
 from scipy.optimize import least_squares
 
 
-def optimize(data, model, params):
-    res = least_squares(model.residual, params, args=(data[:,0], data[:,1]))
+def optimize(data, model):
+    res = least_squares(
+            model.residual,
+            model.params,
+            args=(data[:,0], data[:,1]))
+    model.params = res.x
 
-    return res.x
