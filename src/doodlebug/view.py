@@ -7,11 +7,12 @@ import matplotlib.pyplot as plt
 
 from .model import get_models
 from .point_manager import PointManager
+from .optimize import optimize
 
 
-def _init_ax(ax):
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, 10)
+def _init_ax(ax, x_min=0., x_max=10., y_min=0., y_max=10.):
+    ax.set_xlim(x_min, x_max)
+    ax.set_ylim(y_min, y_max)
     ax.set_title("Left-click: add point, Right-click: remove nearest point")
 
 
@@ -24,6 +25,7 @@ class GUI(QMainWindow):
         # Example dictionary
         self.model_by = get_models()
         self.selected_option = list(self.model_by.keys())[0]
+        self.model_params = self.model_by[self.selected_option].get_params()
 
         # Matplotlib figure
         self.canvas = FigureCanvas(plt.Figure())
@@ -75,10 +77,10 @@ class GUI(QMainWindow):
         print("All points cleared.")
 
     def option_changed(self, text):
-        self.point_manager.reset()
         self.redraw()
 
         self.selected_option = text
+        self.model_params = self.model_by[self.selected_option].get_params()
         print(f"→ {self.selected_option}")
 
     def redraw(self):
@@ -89,15 +91,15 @@ class GUI(QMainWindow):
             self.canvas.draw()
             return
 
+        # Plot observed points
         points_array = np.array(self.point_manager.get())
-        self.ax.plot(points_array[:, 0], points_array[:, 1], 'ro')
+        self.ax.plot(points_array[:,0], points_array[:,1], 'ro')
 
-        model = get_models()[self.selected_option]
-        x_range = (
-                min(points_array[:,0]),
-                max(points_array[:,0]))
-        model_func = model.get_model_func()
-        ys = model_func(points_array[:,0])
-        self.ax.plot(points_array[:,0], ys, "g--", label="Model")
+        # Plot a optimized line
+        model = self.model_by[self.selected_option]
+        new_model_params = optimize(points_array, model, self.model_params)
+        optimized_line = [model.predict(new_model_params, x, y) for x, y in self.point_manager.get()]
+
+        self.ax.plot(points_array[:,0], optimized_line, "g--", label="Model")
 
         self.canvas.draw()
